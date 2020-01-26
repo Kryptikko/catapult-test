@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import InvitedContractsContainer from '../InvitedContracts/InvitedContractsContainer'
+import InvitedContractsContainer from '../invitedContracts/InvitedContractsContainer'
 
 function ShiftsList(props) {
   const {list} = props
