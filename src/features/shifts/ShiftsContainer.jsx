@@ -31,6 +31,10 @@ ShiftsContainer.propTypes = {
     staff_required: PropTypes.number.isRequired,
     number_of_invited_staff: PropTypes.number.isRequired,
     jobType: PropTypes.string.isRequired,
+    fetchContractors: PropTypes.bool.isRequired,
+    invitedContractsList: PropTypes.arrayOf(PropTypes.shape({
+      candidateName: PropTypes.string.isRequired,
+    })),
   })).isRequired,
   fetchingShifts: PropTypes.bool.isRequired,
   fetchShiftsList: PropTypes.func.isRequired,

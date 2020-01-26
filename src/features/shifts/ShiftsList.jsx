@@ -15,7 +15,13 @@ function ShiftsList(props) {
               Start date: {shift.shiftDate} <br />
               Start time: {shift.startTime} <br />
               End time:   {shift.endTime} <br />
-            <InvitedContractsContainer roleId={shift.roleId} />
+              { shift.number_of_invited_staff ?
+                <InvitedContractsContainer
+                  roleId={shift.roleId}
+                  fetchContractors={shift.fetchContractors}
+                  invitedContractsList={shift.invitedContractsList} />
+                : null
+              }
             <hr />
           </div>
           ))
@@ -33,6 +39,10 @@ ShiftsList.propTypes = {
     staff_required: PropTypes.number.isRequired,
     number_of_invited_staff: PropTypes.number.isRequired,
     jobType: PropTypes.string.isRequired,
+    invitedContractsList: PropTypes.arrayOf(PropTypes.shape({
+      candidateName: PropTypes.string.isRequired,
+    })),
+    fetchContractors: PropTypes.bool.isRequired,
   })).isRequired,
 }
 
