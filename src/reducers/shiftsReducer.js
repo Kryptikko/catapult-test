@@ -35,7 +35,6 @@ const shiftsReducer = (state = InitialState, action) => {
     case 'FETCH_INVITED_CONTRACTS_LIST_FULFILLED': {
       var {meta, payload} = action;
 
-
       const updatedShiftList = state.shiftsList.map(_shiftPatchGenerator(
           meta.roleId,
           {
