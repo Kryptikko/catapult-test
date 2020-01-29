@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import InvitedContractsContainer from '../invitedContracts/InvitedContractsContainer'
+import ShiftsFilterBar from './ShiftsFilterBar'
 
 function ShiftsList(props) {
   const {list} = props
@@ -8,6 +9,8 @@ function ShiftsList(props) {
   return (
     <div>
       <h1>Shifts List</h1>
+      <ShiftsFilterBar />
+      <hr />
       {
         list.map((shift) => (
           <div key={shift.roleId}>

@@ -4,14 +4,14 @@ const InitialState = {
 }
 
 
-const _shiftUpdateGenerator = (roleId, updateObj) => (item) => {
+const _shiftPatchGenerator = (roleId, updateObj) => (item) => {
   if (item.roleId == roleId) {
     item = Object.assign({}, item, updateObj);
   }
   return item;
 };
 
-const _applyContractorContext = (item) => {
+const _applyContractorBase = (item) => {
   return Object.assign({}, {
     fetchContractors: false,
     invitedContractsList: [],
@@ -24,7 +24,7 @@ const shiftsReducer = (state = InitialState, action) => {
       const {payload: {data}} = action
       return Object.assign({}, state, {
         fetchingShifts: false,
-        shiftsList: data.map(_applyContractorContext)
+        shiftsList: data.map(_applyContractorBase)
       })
     }
 
@@ -36,7 +36,7 @@ const shiftsReducer = (state = InitialState, action) => {
       var {meta, payload} = action;
 
 
-      const updatedShiftList = state.shiftsList.map(_shiftUpdateGenerator(
+      const updatedShiftList = state.shiftsList.map(_shiftPatchGenerator(
           meta.roleId,
           {
             fetchContractors: false,
@@ -48,7 +48,7 @@ const shiftsReducer = (state = InitialState, action) => {
 
     case 'FETCH_INVITED_CONTRACTS_LIST_PENDING': {
       var {meta} = action;
-      const updatedShiftList = state.shiftsList.map(_shiftUpdateGenerator(
+      const updatedShiftList = state.shiftsList.map(_shiftPatchGenerator(
           meta.roleId,
           {
             fetchContractors: true,

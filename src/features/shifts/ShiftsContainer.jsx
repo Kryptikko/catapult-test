@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {fetchShifts} from '../../actions/shiftsActions'
 import ShiftsList from './ShiftsList'
+import {timeFilters} from './../../lib/timeutils'
 
 class ShiftsContainer extends Component {
   componentDidMount() {
@@ -40,10 +41,20 @@ ShiftsContainer.propTypes = {
   fetchShiftsList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => ({
-  shiftsList: state.shifts.shiftsList,
-  fetchingShifts: state.shifts.fetchingShifts,
-})
+const mapStateToProps = (state) => {
+  const jobVal = state.shiftsFilters.jobTypeValue
+  const timeVal = state.shiftsFilters.startTimeValue
+
+
+  let filteredShifts = state.shifts.shiftsList
+    .filter(shift => jobVal == shift.jobType || jobVal == "ALL")
+    .filter(shift => timeFilters[timeVal](shift.startTime));
+
+  return {
+    shiftsList: filteredShifts,
+    fetchingShifts: state.shifts.fetchingShifts,
+  }
+}
 
 const mapDispatchToProps = (dispatch) => ({
   fetchShiftsList: () => dispatch(fetchShifts()),
