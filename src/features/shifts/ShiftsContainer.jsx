@@ -41,10 +41,9 @@ ShiftsContainer.propTypes = {
   fetchShiftsList: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   const jobVal = state.shiftsFilters.jobTypeValue
   const timeVal = state.shiftsFilters.startTimeValue
-
 
   let filteredShifts = state.shifts.shiftsList
     .filter(shift => jobVal == shift.jobType || jobVal == "ALL")
@@ -62,7 +61,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+export const mapDispatchToProps = (dispatch) => ({
   fetchShiftsList: () => dispatch(fetchShifts()),
 })
 
