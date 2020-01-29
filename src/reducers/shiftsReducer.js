@@ -1,22 +1,9 @@
 const InitialState = {
   shiftsList: [],
+  pendingShifts: [],
   fetchingShifts: false,
 }
 
-
-const _shiftPatchGenerator = (roleId, updateObj) => (item) => {
-  if (item.roleId == roleId) {
-    item = Object.assign({}, item, updateObj);
-  }
-  return item;
-};
-
-const _applyContractorBase = (item) => {
-  return Object.assign({}, {
-    fetchContractors: false,
-    invitedContractsList: [],
-  }, item);
-};
 
 const shiftsReducer = (state = InitialState, action) => {
   switch (action.type) {
@@ -24,7 +11,7 @@ const shiftsReducer = (state = InitialState, action) => {
       const {payload: {data}} = action
       return Object.assign({}, state, {
         fetchingShifts: false,
-        shiftsList: data.map(_applyContractorBase)
+        shiftsList: data
       })
     }
 
@@ -33,27 +20,17 @@ const shiftsReducer = (state = InitialState, action) => {
     }
 
     case 'FETCH_INVITED_CONTRACTS_LIST_FULFILLED': {
-      var {meta, payload} = action;
-
-      const updatedShiftList = state.shiftsList.map(_shiftPatchGenerator(
-          meta.roleId,
-          {
-            fetchContractors: false,
-            invitedContractsList: payload.data,
-          }
-       ));
-      return Object.assign({}, state, {shiftsList: updatedShiftList})
+      var {meta} = action;
+      const pendingShifts = state.pendingShifts.slice()
+      pendingShifts.splice(pendingShifts.indexOf(meta.roleId), 1);
+      return Object.assign({}, state, {pendingShifts: pendingShifts})
     }
 
     case 'FETCH_INVITED_CONTRACTS_LIST_PENDING': {
       var {meta} = action;
-      const updatedShiftList = state.shiftsList.map(_shiftPatchGenerator(
-          meta.roleId,
-          {
-            fetchContractors: true,
-          }
-       ));
-      return Object.assign({}, state, {shiftsList: updatedShiftList})
+      const pendingShifts = state.pendingShifts.slice()
+      pendingShifts.push(meta.roleId);
+      return Object.assign({}, state, {pendingShifts: pendingShifts})
     }
 
     default:

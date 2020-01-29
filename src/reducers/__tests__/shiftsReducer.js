@@ -1,21 +1,21 @@
 import shiftsReducer from '../shiftsReducer'
 
-test("shiftsReducer should apply the base shift model to all shifts", () => {
+test("shiftsReducer should flag shifts as pending on fetching contracts list", () => {
   const action = {
-    type: "FETCH_SHIFTS_LIST_FULFILLED",
-    payload: {
-      data: [{}]
+    type: "FETCH_INVITED_CONTRACTS_LIST_PENDING",
+    meta: {
+      roleId: 1337
     }
   };
-  const state = shiftsReducer(null, action);
+  const initState = {
+    pendingShifts: []
+  }
+  const state = shiftsReducer(initState, action);
 
-  expect(state.shiftsList[0]).toEqual(expect.objectContaining({
-    fetchContractors: false,
-    invitedContractsList: [],
-  }));
+  expect(state.pendingShifts).toEqual(expect.arrayContaining([1337]));
 });
 
-test("shiftsReducer should patch the contractor list based on the shift roleId", () => {
+test("shiftsReducer should shifts as no longer pending after fetching their contractor list", () => {
   const contractorList = [{
     contractor: "data"
   }];
@@ -29,17 +29,9 @@ test("shiftsReducer should patch the contractor list based on the shift roleId",
     }
   };
   const initialState = {
-    shiftsList: [{
-      roleId: 1,
-    },{
-      roleId: 1337,
-    }],
-    fetchingShifts: false,
+    pendingShifts: [1337],
   }
   const state = shiftsReducer(initialState, action);
 
-  expect(state.shiftsList[1].fetchContractors)
-    .toEqual(false);
-  expect(state.shiftsList[1].invitedContractsList)
-    .toEqual(expect.arrayContaining(contractorList));
+  expect(state.pendingShifts.length).toEqual(0);
 });

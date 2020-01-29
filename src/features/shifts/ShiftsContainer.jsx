@@ -48,7 +48,13 @@ const mapStateToProps = (state) => {
 
   let filteredShifts = state.shifts.shiftsList
     .filter(shift => jobVal == shift.jobType || jobVal == "ALL")
-    .filter(shift => timeFilters[timeVal](shift.startTime));
+    .filter(shift => timeFilters[timeVal](shift.startTime))
+    .map(shift => {
+      shift.fetchContractors = state.shifts.pendingShifts.includes(shift.roleId)
+      shift.invitedContractsList = state.contractors.contractorsList.filter(
+        contractor => contractor.roleId == shift.roleId);
+      return shift
+    });
 
   return {
     shiftsList: filteredShifts,
